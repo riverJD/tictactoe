@@ -15,7 +15,6 @@
 
 
 
-
 // Create game board
 const gameBoard = (() => {
 
@@ -56,8 +55,42 @@ const gameBoard = (() => {
 
 gameBoard.createBoard();
 gameBoard.setOwner(0, 'Player 1')
-console.log(gameBoard.getBoard())
 
+const displayGame = (() => {
+
+    const updateBoard = () => {
+        
+    }
+    const _createSquare = (square) => {
+        
+        const board = document.querySelector('.game-board');
+        const cell = document.createElement('div');
+        cell.setAttribute('id', `square:${square}`);
+        cell.textContent = square
+        cell.classList.add('game-square');
+        board.appendChild(cell);     
+    }   
+    
+    const generateBoard = (size) => {
+       
+        for (square in size){
+            _createSquare(square);
+            
+        }
+    }
+    
+    const drawSquare = (position) => {
+
+    }
+
+    return {generateBoard}
+}
+
+)();
+
+
+
+displayGame.generateBoard(gameBoard.getBoard())
 
 // Mark spot (look at color.js)
 
@@ -66,5 +99,5 @@ console.log(gameBoard.getBoard())
 
 // Detect winner
 
-
-// Thought --  create object for every row/column that could win.  When an object is filled call a win method??
+// Thought --  create object for every row/column
+// that could win.  When an object is filled call a win method?
