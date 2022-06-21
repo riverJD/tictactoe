@@ -41,6 +41,10 @@ const gameBoard = (() => {
     let _playerTurn = playerObj
     let _board = [];
 
+    
+
+
+
     const switchPlayersTurn = () => {
 
             _playerTurn == playerObj? _playerTurn = player2Obj: _playerTurn = playerObj  
@@ -68,9 +72,8 @@ const gameBoard = (() => {
         for (let i = 0; i < boardSize;  i++){ 
             _board[i] = BoardSquare(i)
         }
-
-
     }
+
 
     const setOwner = (pos, player) => {
         _board[pos].squareOwner = player;
@@ -80,6 +83,15 @@ const gameBoard = (() => {
     const getBoard = (pos) => {
        return pos != null ? _board[pos] : _board;
     }
+
+
+    const winningConditions = () => {
+
+
+
+    }
+    
+
     
     return {createBoard, setOwner, getBoard, switchPlayersTurn, getTurn};
 
