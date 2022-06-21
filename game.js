@@ -37,13 +37,15 @@ const player2Obj = {
 const gameBoard = (() => {
 
     const boardSize = 9;
+    const _winCount = 3;
 
     let _playerTurn = playerObj
     let _board = [];
-
-    
-
-
+    let _row = []
+    let _col = []
+    let _diag1 = []
+    let _diag2 = []
+       
 
     const switchPlayersTurn = () => {
 
@@ -57,7 +59,7 @@ const gameBoard = (() => {
     }
 
     // Generate board
-    const createBoard = (playerCount) => {
+    const createBoard = () => {
 
         // One gameboard unit
         let BoardSquare = (position) => {
@@ -69,12 +71,36 @@ const gameBoard = (() => {
             return {boardPosition, squareOwner}
         }
     
-        for (let i = 0; i < boardSize;  i++){ 
-            _board[i] = BoardSquare(i)
+
+        for (let i = 0; i < _winCount; i++){
+        
+                        
+            _row.push(createWinArray())
+            _col.push(createWinArray())
+            _diag1.push(createWinArray())
+            _diag2.push(createWinArray())
         }
+   
     }
 
+    // Factory to create arrays we will check for victory condition
+    const createWinArray = () => {
 
+        const arr = [];
+        arr.length = 3;
+        arr.fill(0);
+
+        return arr
+      }  
+
+    const checkWinner = () => {
+
+       const winner = _row.reduce( 
+        (prev, cur) => prev + cur);
+
+        return winner;
+       };
+        
     const setOwner = (pos, player) => {
         _board[pos].squareOwner = player;
     }
@@ -84,20 +110,13 @@ const gameBoard = (() => {
        return pos != null ? _board[pos] : _board;
     }
 
-
-    const winningConditions = () => {
-
-
-
-    }
     
-
-    
-    return {createBoard, setOwner, getBoard, switchPlayersTurn, getTurn};
+    return {_col, _row, createBoard, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner}
 
 })();
 
 gameBoard.createBoard();
+gameBoard.checkWinner();
 
 const displayGame = (() => {
 
@@ -136,7 +155,7 @@ const displayGame = (() => {
 
     }
     
-    const clickSquare = (cell) => {
+    /* const clickSquare = (cell) => {
         console.log(gameBoard.getBoard(cell.id).squareOwner);
         if (gameBoard.getBoard(cell.id).squareOwner != null) {
             alert("Pick an empty square");
@@ -155,6 +174,7 @@ const displayGame = (() => {
         
         turnText.textContent = gameBoard.getTurn().pName;
     }
+    */
 
     const drawSquare = (cell) => {
 
@@ -184,3 +204,13 @@ displayGame.generateBoard(gameBoard.getBoard())
 
 // Thought --  create object for every row/column
 // that could win.  When an object is filled call a win method?
+
+//helpers
+
+// Set multiple attributes from one function call
+function setAttributes(element, attributes)
+{
+    Object.entries(attributes).forEach(([key, value]) => {
+        element.setAttribute(key, value)
+    });
+}
