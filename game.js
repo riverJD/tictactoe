@@ -9,7 +9,6 @@ const Player = (player, letter) => {
 
     const playerName = player;
     const playerLetter = letter;
-    console.log(winMod);
 
     return {playerName, letter, winMod}
 
@@ -66,8 +65,8 @@ const displayGame = (() => {
     }
     
     const clickSquare = (square) => {
-        const row = square.getAttribute("data-row");
-        const col = square.getAttribute("data-col");
+        const row = parseInt(square.getAttribute("data-row"));
+        const col = parseInt(square.getAttribute("data-col"));
 
         if (square.classList.contains("selected-square")) return;
     
@@ -84,7 +83,6 @@ const displayGame = (() => {
         
         
         const display = square.querySelector('.square-content');
-        console.log(display);
         square.classList.add("selected-square");
         display.textContent = gameBoard.getTurn().letter;
        
@@ -119,8 +117,8 @@ const gameBoard = (() => {
     // that line must be filled, so the game is over.  
     let _row = []
     let _col = []
-    let _diag1 = []
-    let _diag2 = []
+    let _diag = []
+    let _diagRev = [];
        
   
 
@@ -180,7 +178,18 @@ const gameBoard = (() => {
     const setRowCol = (row, col) => {
         _row[row] += _playerTurn.winMod;
         _col[col] += _playerTurn.winMod;
-        checkWinner(row, col);
+        
+        // Top left, bottom right, and center row and cols will all be equal;
+        if (row === col) {
+            
+            _diag[0] += _playerTurn.winMod;
+        }
+
+        // The bottom left, atop right and center coordinates of the grid
+        // will equal the grid size (zero index count) when adding row + col
+        if ((row + col) == (_winCount - 1)) _diagRev[0] += _playerTurn.winMod;
+      
+        checkWinner();
     }
 
     const getGridSize = () => _winCount
@@ -188,11 +197,20 @@ const gameBoard = (() => {
     
     createWinArray(_row);
     createWinArray(_col);
-    createWinArray(_diag1);
-    createWinArray(_diag2);
+    createWinArray(_diag);
+    createWinArray(_diagRev);
+
 
     function endGame(){
         console.log("Game is over");
+
+
+        // Kill listeners
+
+        // Style board
+
+
+        // Popup Restart Modal >>>>> Refresh game
 
 
     }
