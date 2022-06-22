@@ -39,7 +39,7 @@
     justify-self: flex-start;
 }
 
-.cell-content{
+.square-content{
     font-size: 5rem;
     grid-area: 2 / 2 / 3 / 3;
 }in
