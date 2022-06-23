@@ -22,11 +22,78 @@
         </div>
     <div class="game-board">
 
+        
+    </div>
+    </div>
+    </div>
+    
+    <div class="game-buttons">
+        <button id="start-button">Play Game</button>
 
     </div>
+
+    <div class="modal-container">
+    <div class="create-game-modal">
+    
+        <h2 class="sub-header">Game Settings</h2>
+        <form action="" id="create-game-form">
+            <label for="player_name">Player Name:</label>
+                <input type="text" name="player_name" id="name_input" class="modal-input">
+               
+            <fieldset>
+                <legend><h2>Choose your side</h2>
+                </legend>
+
+                <label for="player_sideX">
+                    <input type="image" src="./img/x-box.svg" alt="Choose X" id="choose-X" class="game-letter-button" name="player_sideX">
+                </label>
+
+                <label for="player_sideO">
+                    <input type="image" src="./img/o-box.svg" alt="Choose O" id="choose-O" class="game-letter-button" name="player_sideY">
+                </label>
+            </fieldset>
+            <fieldset id="difficulty-fieldset">
+                <legend>
+                    <h2>Difficulty</h2>
+                </legend>
+
+                <label for="easy">
+                    <input type="button" value="Easy" name="easy" class="difficulty selected-difficulty">
+                </label>
+                <label for="medium">
+                    <input type="button" value="Medium" name="medium" class="difficulty">
+                </label>
+                <label for="hard">
+                    <input type="button" value="Hard" name="hard" class="difficulty">
+                </label>
+
+                <label for="impossible">
+                    <input type="button" value="Impossible" name="impossible" class="difficulty">
+                </label>
+            </fieldset>
+
+            <button type="submit" id="start-submit">Start Game!</button>
+            
+
+</form>
+</div>
+    
+
+
+
+
+            </fieldset>
+
+
+            </label>
+
+
+
+        </form>
+
+
+
     </div>
-    </div>
-      
   
 
 </div>

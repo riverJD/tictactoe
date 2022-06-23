@@ -1,6 +1,6 @@
 
 // Create player objects
-const Player = (player, letter) => {
+const Player = (player, letter, difficulty) => {
 
     let defLetter = 'X';
     let winMod = 1;
@@ -10,8 +10,35 @@ const Player = (player, letter) => {
     const playerName = player;
     const playerLetter = letter;
 
-    return {playerName, letter, winMod}
 
+    // AI Opponent
+    if (difficulty != null){
+        const gameDifficulty = difficulty;
+
+        switch (difficulty){
+
+            case 'easy':
+                //easy AI
+                break;
+            case 'medium':
+                //medium AI
+                break;
+            case 'hard':
+                //hard AI
+                break;
+            case 'impossible':
+                //impossible AI
+                break;
+
+
+        }
+
+
+    }
+
+
+
+    return {playerName, letter, winMod}
 }
 
 const playerObj = Player("Player A", "X")
@@ -96,7 +123,68 @@ const displayGame = (() => {
         squareID.textContent = (`${squareID.textContent} (${gameBoard.getTurn().pName})`);
     }
 
-    return {generateBoard}
+    const launchGame = document.querySelector("#start-button");
+    launchGame.addEventListener('click', () => gameLauncher())
+
+
+    const gameLauncher = () => {
+
+        const gameSettings = document.querySelector(".modal-container");
+        gameSettings.style.display = "flex"
+        const gameForm = gameSettings.querySelector("#create-game-form");
+        let letterSelection;
+        let diffSelection;
+        
+
+        const letterX = document.querySelector("#choose-X");
+        console.log(letterX)
+        const letterO = gameForm.querySelector("#choose-O");
+        letterX.addEventListener('click', () => {
+            letterX.classList.add("selected-letter");
+            letterO.classList.remove("selected-letter");
+            letterSelection = "X"
+        })
+        letterO.addEventListener('click', () => {
+            letterO.classList.add("selected-letter");
+            letterX.classList.remove("selected-letter");
+            letterSelection = "O"
+        })
+
+        const diffButton = gameForm.querySelectorAll(".difficulty");
+        diffButton.forEach(button => button.addEventListener('click', () => {
+           
+            console.log("click")
+            // remove selection from other buttons
+            diffButton.forEach(otherbutton => {
+                otherbutton.classList.remove('selected-difficulty')
+            });
+            diffSelection = button.getAttribute("name");
+            console.log(diffSelection)
+            button.classList.add('selected-difficulty');
+
+
+
+        }))
+
+                                      
+
+        gameForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const gameData = new FormData(gameForm);
+
+            console.log(gameData.get('player_name'));
+            
+
+           
+
+        });
+    }
+
+    const startGame = (e) => {
+        
+    }
+
+    return { generateBoard}
 }
 
 )();

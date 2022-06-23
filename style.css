@@ -1,12 +1,18 @@
 
+body{
+    display: flex;
+    flex-direction: column;
+}
 
-
+/* #a83232
+*/
 
 .game{
     display: flex;
     flex-direction: column;
     background-color: azure;
     align-items: center;
+    
 
 }
 
@@ -14,8 +20,8 @@
 
     background-color: blanchedalmond;
     display: grid;
-    height: 500px;
-    width: 500px;
+    height: min(500px, 80vw);
+    width: min(500px, 80vw);
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
 
@@ -30,6 +36,7 @@
     background-color: lightblue;
     justify-items: center;
     border: 1px solid black;
+ 
 }
 
 
@@ -77,3 +84,45 @@
 .selected-square{
     background-color:darkturquoise;
 }
+
+.modal-container{
+    display: flex;
+}
+
+.create-game-modal{
+    display: flex;;
+    flex-direction: column;
+    width: max(300px, 10vw);
+    background-color: #a83232;
+}
+
+#create-game-form{
+    display: grid;
+    justify-content: center;
+    outline: 1px dotted green;
+}
+
+#create-game-form fieldset{
+    outline: 1px dotted yellow;
+    display: flex;
+    justify-content: space-around;
+}
+
+.game-letter-button{
+    height: auto; 
+    width: 48px;
+    
+    
+}
+
+.selected-letter, .selected-difficulty{
+    outline: 5px solid white;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.visible{
+    display: flex;
+}
+
+
