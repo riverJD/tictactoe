@@ -4,7 +4,9 @@ const Player = (player, letter, difficulty) => {
 
     let defLetter = 'X';
     let winMod = 1;
-    
+    const gameDifficulty = 'medium'
+
+
     if (letter != defLetter) winMod = -1;
 
     const playerName = player;
@@ -13,7 +15,7 @@ const Player = (player, letter, difficulty) => {
 
     // AI Opponent
     if (difficulty != null){
-        const gameDifficulty = difficulty;
+        gameDifficulty = difficulty;
 
         switch (difficulty){
 
@@ -38,8 +40,31 @@ const Player = (player, letter, difficulty) => {
 
 
 
-    return {playerName, letter, winMod}
-}
+  
+
+    const AI = (difficulty) => {
+
+        // easy AI
+        const tiles = document.querySelectorAll('game-square');
+       
+        console.log(".")
+        const selectSquare = () => {
+            tiles.forEach(square => {
+                console.log(square);
+
+            })
+        }
+        selectSquare();
+        return {tiles, selectSquare}
+    }
+
+    const easyAI = AI('easy');
+    //easyAI.selectSquare();
+    return {playerName, letter, winMod, easyAI, gameDifficulty}
+
+    }
+
+
 
 const playerObj = Player("Player A", "X")
 const player2Obj = Player("Player B", "O")
@@ -161,8 +186,6 @@ const displayGame = (() => {
             diffSelection = button.getAttribute("name");
             console.log(diffSelection)
             button.classList.add('selected-difficulty');
-
-
 
         }))
 
