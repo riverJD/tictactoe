@@ -38,20 +38,20 @@ const Player = (player, letter, difficulty) => {
 
     }
 
-
-
+    const tiles = document.querySelectorAll('.game-square');
+    tiles.forEach(tile => console.log("Yum"))
   
 
     const AI = (difficulty) => {
 
         // easy AI
-        const tiles = document.querySelectorAll('game-square');
        
-        console.log(".")
+       
+        
         const selectSquare = () => {
             tiles.forEach(square => {
                 console.log(square);
-
+                return ("Hmm")
             })
         }
         selectSquare();
@@ -60,14 +60,14 @@ const Player = (player, letter, difficulty) => {
 
     const easyAI = AI('easy');
     //easyAI.selectSquare();
-    return {playerName, letter, winMod, easyAI, gameDifficulty}
+    return {playerName, letter, winMod, gameDifficulty, easyAI}
 
     }
 
 
 
-const playerObj = Player("Player A", "X")
-const player2Obj = Player("Player B", "O")
+
+//const player2Obj = Player("Player B", "O")
 
 // Create game board
 
@@ -211,9 +211,12 @@ const displayGame = (() => {
 }
 
 )();
+const playerObj = Player("Player A", "X")
 
 const gameBoard = (() => {
 
+
+    
     const boardSize = 9;
     const _winCount = 3;
 
@@ -270,9 +273,13 @@ const gameBoard = (() => {
       
     };
 
+    
+    
+
+
+
     // Returns winner if there is one, false if not. 
 
-       
     
     const setOwner = (pos, player) => {
         _board[pos].squareOwner = player;
@@ -327,7 +334,6 @@ const gameBoard = (() => {
     }
     
     return {_row, _board, setRowCol, getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize}
-
 })();
 
 
