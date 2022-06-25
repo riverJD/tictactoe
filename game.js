@@ -4,8 +4,8 @@ const Player = (player, letter, difficulty) => {
 
     let defLetter = 'X';
     let winMod = 1;
-    const gameDifficulty = 'medium'
-
+    let isTurn = true;
+    let bot = false;
 
     if (letter != defLetter) winMod = -1;
 
@@ -15,59 +15,88 @@ const Player = (player, letter, difficulty) => {
 
     // AI Opponent
     if (difficulty != null){
-        gameDifficulty = difficulty;
+        //gameDifficulty = difficulty;
 
         switch (difficulty){
 
-            case 'easy':
-                //easy AI
-                break;
-            case 'medium':
-                //medium AI
-                break;
-            case 'hard':
-                //hard AI
-                break;
-            case 'impossible':
-                //impossible AI
-                break;
+
 
 
         }
 
+    } 
 
+    const turn = () => {
+
+        if (bot){
+            // Wait a second or two for better UE
+            const delay = (Math.random() * 2000) + 1000; 
+            setTimeout(() => { bot.turn(); }, delay)       
+        }
+        else{
+
+        }
     }
 
-    const tiles = document.querySelectorAll('.game-square');
-    tiles.forEach(tile => console.log("Yum"))
-  
 
     const AI = (difficulty) => {
 
-        // easy AI
-       
-       
-        
-        const selectSquare = () => {
-            tiles.forEach(square => {
-                console.log(square);
-                return ("Hmm")
-            })
+        const mode = difficulty;
+        let movesMade = 0;
+        const readBoard = () => {
+            const squares = document.querySelectorAll(".game-square")
+            return squares;
         }
-        selectSquare();
-        return {tiles, selectSquare}
+
+        // Select a square, unselected square
+        const selectSquare = () => {
+            console.log(mode)
+            let selection = ""
+            switch(mode){
+
+                case 'Easy':
+                    console.log("Ez")
+                    selection = readBoard()[Math.floor(Math.random() * readBoard().length)];
+                    break;
+                case 'Medium':
+                    
+                    break;
+                case 'Hard':
+                    //hard AI
+                    break;
+                case 'Impossible':
+                    //impossible AI
+                    break;
+            }
+  
+
+            if (!gameBoard.getSelected(selection)){
+                return selection
+            }
+
+            return selectSquare();
+        
+            
+        }
+        // One turn
+        const turn = () => {
+            gameBoard.clickSquare(selectSquare())
+        }       
+        return {mode, turn, movesMade}
     }
 
-    const easyAI = AI('easy');
+
+    if (difficulty != null){
+        bot = AI(difficulty);
+    }
+ 
+ 
     //easyAI.selectSquare();
-    return {playerName, letter, winMod, gameDifficulty, easyAI}
+    return {playerName, letter, winMod, isTurn, bot, turn}
 
     }
 
 
-
-
-//const player2Obj = Player("Player B", "O")
 
 // Create game board
 
@@ -99,8 +128,13 @@ const displayGame = (() => {
         square.classList.add('game-square');
 
         // When player selects a square
-        square.addEventListener('click', clickSquare.bind(playerObj, square))
-        
+        square.addEventListener('click', () => {
+
+        if (playerObj.isTurn) gameBoard.clickSquare(square)
+
+
+        })
+
         board.appendChild(square);     
     }   
     
@@ -116,20 +150,6 @@ const displayGame = (() => {
         }
     }
     
-    const clickSquare = (square) => {
-        const row = parseInt(square.getAttribute("data-row"));
-        const col = parseInt(square.getAttribute("data-col"));
-
-        if (square.classList.contains("selected-square")) return;
-    
-        gameBoard.setRowCol(row, col);
-      // gameBoard.setOwner(square.id, gameBoard.getTurn())
-        updateBoard(square);
-        gameBoard.checkWinner();
-        gameBoard.switchPlayersTurn();
-        
-        
-    }
 
     const updateBoard = (square) => {
         
@@ -162,7 +182,6 @@ const displayGame = (() => {
         
 
         const letterX = document.querySelector("#choose-X");
-        console.log(letterX)
         const letterO = gameForm.querySelector("#choose-O");
         letterX.addEventListener('click', () => {
             letterX.classList.add("selected-letter");
@@ -207,11 +226,12 @@ const displayGame = (() => {
         
     }
 
-    return { generateBoard}
+    return { generateBoard, updateBoard}
 }
 
 )();
 const playerObj = Player("Player A", "X")
+const player2Obj = Player("Player B", "O", "Easy")
 
 const gameBoard = (() => {
 
@@ -224,6 +244,7 @@ const gameBoard = (() => {
 
     // storage of rows/columns/diagnals
     let _board = [];
+    let _selected = [];
     
     // Victory logic: 
     // _Everytime user clicks a square, 1 will be added (or subtracted) from 
@@ -238,8 +259,9 @@ const gameBoard = (() => {
 
     const switchPlayersTurn = () => {
 
+        _playerTurn.isTurn = false;
         _playerTurn == playerObj ? _playerTurn = player2Obj : _playerTurn = playerObj  
-            
+        _playerTurn.isTurn = true;
     }
 
     // returns player object, not player name
@@ -261,7 +283,7 @@ const gameBoard = (() => {
     const checkWinner = (row, col) => {
 
        for (arr of _board){
-            console.log(arr);
+            
             if (arr.includes(_winCount) || arr.includes(-_winCount)){
 
                 console.log(`${_playerTurn.playerName} wins!`)
@@ -273,11 +295,28 @@ const gameBoard = (() => {
       
     };
 
+    const clickSquare = (square) => {
+
+        
+        const row = parseInt(square.getAttribute("data-row"));
+        const col = parseInt(square.getAttribute("data-col"));
+
+        getSelected(square);
+        if (square.classList.contains("selected-square")) return false;
+        _selected.push(square);
+        setRowCol(row, col);
+      // gameBoard.setOwner(square.id, gameBoard.getTurn())
+        displayGame.updateBoard(square);
+        checkWinner();
+        switchPlayersTurn();
+        if (getTurn().isTurn) getTurn().turn();
+            
+    }
+
+    const getSelected = (square) => {
+        return (_selected.includes(square))
+    }
     
-    
-
-
-
     // Returns winner if there is one, false if not. 
 
     
@@ -333,7 +372,7 @@ const gameBoard = (() => {
 
     }
     
-    return {_row, _board, setRowCol, getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize}
+    return {_row, _board, setRowCol, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, clickSquare}
 })();
 
 
