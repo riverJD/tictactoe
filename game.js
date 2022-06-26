@@ -59,7 +59,9 @@ const Player = (player, letter, difficulty) => {
                     selection = readBoard()[Math.floor(Math.random() * readBoard().length)];
                     break;
                 case 'Medium':
-                    
+                    selection = readBoard()[Math.floor(Math.random() * readBoard().length)];
+
+                    if (getRow(selection.getAttribute('data-row') && getCol(selection.getAttribute))
                     break;
                 case 'Hard':
                     //hard AI
