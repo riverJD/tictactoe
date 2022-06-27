@@ -66,9 +66,13 @@ const Player = (player, letter, difficulty) => {
                     // Will find position in row and columns that has lowest value, either empty or mostly AI's position on board.
                     // Ex: in the array row[-2, 0, 1], row[0] is the lowest value and also represents the coordinate on the grid.
                  
+                    const squareOptions = gameBoard.getArrayHighestValues();
                     
-
-
+                    
+                    square = squareOptions[Math.floor(Math.random() * squareOptions.length)];
+                    
+                    const row = square.boardPosition.row;
+                    const col = square.boardPosition.col;
                     selection = gameBoard.getSquare(row, col);
                     
                     console.log(selection);
@@ -93,6 +97,13 @@ const Player = (player, letter, difficulty) => {
             
         }
 
+        const highestValue = () => {
+
+            const temp = Math.max(gameBoard._board.map(e => e.value))
+            console.log(temp);
+       
+        }
+
         const findNext = (coordinate) => {
             console.log('....')
             console.log(coordinate)
@@ -105,7 +116,7 @@ const Player = (player, letter, difficulty) => {
         const turn = () => {
             gameBoard.clickSquare(selectSquare())
         }       
-        return {mode, turn, movesMade}
+        return {mode, turn, movesMade, highestValue}
     }
 
 
@@ -120,13 +131,11 @@ const Player = (player, letter, difficulty) => {
     }
 
 
-
-
+    /*
 const searchBoard = (square) => {
 
 
     // base case
-
 
     let tmp;
 
@@ -153,9 +162,7 @@ const searchBoard = (square) => {
 }
 
 
-
-
-
+*/
 
 
 
@@ -303,6 +310,7 @@ const gameBoard = (() => {
     
     const boardSize = 9;
     const _winCount = 3;
+    let highestValue = 0;
 
     let _playerTurn = playerObj;
 
@@ -348,7 +356,7 @@ const gameBoard = (() => {
     
     if (coords.row == 0){
         value += baseValue;
-        console.log(coords.row + "." + coords.col)
+
         
     }
 
@@ -369,44 +377,58 @@ const gameBoard = (() => {
 
     if (coords.row == 1 && coords.col == 1){
         value += bonusValue + baseValue;
-        console.log(value);
+    
     }
 
     //console.log(value);
 
-    console.log(`----`)
-    console.log("Returning " + value)
     return value; 
 
   }
+
+
 
   const setSquareValue = (square) => {
 
     let modvalue = 10;
     let coord = getCoords(square);
 
-
-    const index = _board.findIndex(pos => {
-          
-        if ( pos.boardPosition.row === coord.row && pos.boardPosition.col === coord.col){
-            return pos.boardPosition;
-        } 
- 
-    })
+    // Add specified value, or default mod value
+    const addValue = (square, value) => {
+       
+        square.value += value;
     
-    _board[index].value += modvalue;
-    console.log(_board[index].value);
+    }
+
+    const addvalues = _board.findIndex(pos => {
+          
+        let newPos = pos;
+
+        if ( pos.boardPosition.row === coord.row || pos.boardPosition.col === coord.col){
+           // newPos = pos.boardPosition;_
+           addValue(pos, modvalue);
+
+        }
+
+        // More points for center square
+        if (pos.boardPosition.row == 1 && pos.boardPosition.col == 1){
+            addValue(pos, modvalue)
+        }
+
+     
+        if (pos.value > highestValue){
+
+        highestValue = pos.value;
+        }
+       
+    })    
+    
+
+    
+    //_board[index].value += modvalue;
+    //console.log(_board[index].value);
 
   }
-
-  const getSquareValue = (square) => {
-
-
-
-
-
-  }
-
     //    for (let i = 0; i < boardSize;  i++){ 
       //      _board[i] = BoardSquare(i)
       //  }
@@ -453,7 +475,7 @@ const gameBoard = (() => {
 
     const clickSquare = (square) => {
 
-        
+        console.log(highestValue)
         const row = parseInt(square.getAttribute("data-row"));
         const col = parseInt(square.getAttribute("data-col"));
 
@@ -484,6 +506,7 @@ const gameBoard = (() => {
 
     
 
+
     // Returns square at pos, otherwise entire board
     const getBoard = (pos) => {
        return pos != null ? _board[pos] : _board;
@@ -498,8 +521,19 @@ const gameBoard = (() => {
         const col = square.getAttribute('data-col')
 
         return {row, col}
+    }
 
+    const getHighestValue = () => {
+        return highestValue;
+    }
 
+    const getSquareValue = (square) => {
+        return square.value;
+    }
+
+    const getArrayHighestValues = () => {
+        const highest = _board.filter(item => item.value === highestValue);
+        return highest;
     }
 
     const setRowCol = (row, col) => {
@@ -549,7 +583,7 @@ const gameBoard = (() => {
 
     }
     
-    return {_selected, _row, _col, _board, setSquareValue, generateSquare, getSquareValue, getCoords, setRowCol, getSquare, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, clickSquare}
+    return {_selected, _row, _col, _board, getArrayHighestValues ,getHighestValue, setSquareValue, generateSquare, getSquareValue, getCoords, setRowCol, getSquare, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, clickSquare}
 })();
 
 
