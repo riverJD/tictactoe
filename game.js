@@ -65,19 +65,24 @@ const Player = (player, letter, difficulty) => {
                     
                     // Will find position in row and columns that has lowest value, either empty or mostly AI's position on board.
                     // Ex: in the array row[-2, 0, 1], row[0] is the lowest value and also represents the coordinate on the grid.
-                 
-                    const squareOptions = gameBoard.getArrayHighestValues();
+                    const select = () => {
+
                     
+                    const squareOptions = gameBoard.getArrayHighestValues();
+                    console.log((squareOptions))
                     
                     square = squareOptions[Math.floor(Math.random() * squareOptions.length)];
-                    
+                    console.log(square)
                     const row = square.boardPosition.row;
                     const col = square.boardPosition.col;
                     selection = gameBoard.getSquare(row, col);
                     
-                    console.log(selection);
-
+                    console.log(`Found highest value: ${square.value}`)
+                    console.log(`Choosing square... ${selection}`)
+                    }
                     
+                    return selection;
+
                     break;
                 case 'Hard':
                     //hard AI
@@ -124,6 +129,8 @@ const Player = (player, letter, difficulty) => {
         bot = AI(difficulty);
     }
  
+
+
  
     //easyAI.selectSquare();
     return {playerName, letter, winMod, isTurn, bot, turn}
@@ -311,6 +318,7 @@ const gameBoard = (() => {
     const boardSize = 9;
     const _winCount = 3;
     let highestValue = 0;
+    let gameActive = true;
 
     let _playerTurn = playerObj;
 
@@ -388,11 +396,11 @@ const gameBoard = (() => {
 
 
 
-  const setSquareValue = (square) => {
+  const setSquareValue = ((square) => {
 
     let modvalue = 10;
-    let coord = getCoords(square);
-
+   
+    
     // Add specified value, or default mod value
     const addValue = (square, value) => {
        
@@ -400,7 +408,13 @@ const gameBoard = (() => {
     
     }
 
-    const addvalues = _board.findIndex(pos => {
+    const setValue = (square, value) => {
+        square.value = value;
+    }
+
+    const addNeighborValues = (square) => {
+        let coord = getCoords(square);
+        _board.findIndex(pos => {
           
         let newPos = pos;
 
@@ -419,20 +433,15 @@ const gameBoard = (() => {
         if (pos.value > highestValue){
 
         highestValue = pos.value;
+       
         }
        
     })    
-    
+}
 
-    
-    //_board[index].value += modvalue;
-    //console.log(_board[index].value);
+    return {addValue, setValue, addNeighborValues}
 
-  }
-    //    for (let i = 0; i < boardSize;  i++){ 
-      //      _board[i] = BoardSquare(i)
-      //  }
-
+})();
 
 
     const switchPlayersTurn = () => {
@@ -475,6 +484,7 @@ const gameBoard = (() => {
 
     const clickSquare = (square) => {
 
+        if (!gameActive) return;
         console.log(highestValue)
         const row = parseInt(square.getAttribute("data-row"));
         const col = parseInt(square.getAttribute("data-col"));
@@ -485,7 +495,8 @@ const gameBoard = (() => {
         setRowCol(row, col);
       // gameBoard.setOwner(square.id, gameBoard.getTurn())
         displayGame.updateBoard(square);
-        setSquareValue(square);
+        setSquareValue.addNeighborValues(square);
+        setSquareValue.addValue(square, 100)
         checkWinner();
         switchPlayersTurn();
         if (getTurn().isTurn) getTurn().turn();
@@ -570,11 +581,9 @@ const gameBoard = (() => {
 
 
     function endGame(){
-        console.log("Game is over");
-
-
+        
         // Kill listeners
-
+        gameActive = false;
         // Style board
 
 
