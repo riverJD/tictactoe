@@ -38,6 +38,29 @@ const Player = (player, letter, difficulty) => {
         }
     }
 
+    const addToNeighbor = (selection, val) => {
+
+        
+  
+
+
+        console.log('vvv')
+        console.log(val);
+        console.log('^^^')
+       
+        selection.neighbors.forEach(neighbor => {
+            let next = gameBoard.getSquare(neighbor.row, neighbor.col);
+            console.log(next)
+            gameBoard.setSquareValue.addValue(next, val);
+
+            const nextN = gameBoard.getSquare(next.row, next.col);
+            gameBoard.setSquareValue.addValue(nextN, val);
+            
+        })
+
+
+    }
+
 
     const AI = (difficulty) => {
 
@@ -50,7 +73,7 @@ const Player = (player, letter, difficulty) => {
 
         // Select a square, unselected square
         const selectSquare = () => {
-            console.log(mode)
+            //console.log(mode)
             let selection = ""
             switch(mode){
 
@@ -64,12 +87,16 @@ const Player = (player, letter, difficulty) => {
                   
                     const select = () => {
 
-                    
+                        // Modify some values
+                        
+                        let value = 30;
+
+
                         const squareOptions = gameBoard.getArrayHighestValues();
                         console.log((squareOptions))
                         
                         square = squareOptions[Math.floor(Math.random() * squareOptions.length)];
-                        console.log(square)
+                      //  console.log(square)
                         const row = parseInt(square.boardPosition.row);
                         const col = parseInt(square.boardPosition.col);
                         selection = gameBoard.getSquare(row, col);
@@ -77,6 +104,15 @@ const Player = (player, letter, difficulty) => {
                         console.log(`Found highest value: ${square.value}`)
                         console.log(`Choosing square... ${selection.row}, ${selection.col}`)
     
+                        addToNeighbor(selection, value);
+
+                       
+                        if (gameBoard.getRow(row) === 2 || gameBoard.getCol(col) === 2){
+                            value = 100;
+                        }
+                        
+                        addToNeighbor(selection, value);
+                        
                         return selection;
                         }
                        
@@ -108,7 +144,7 @@ const Player = (player, letter, difficulty) => {
         const highestValue = () => {
 
             const temp = Math.max(gameBoard._board.map(e => e.value))
-            //console.log(temp);
+            return temp;
        
         }
 
@@ -136,7 +172,7 @@ const Player = (player, letter, difficulty) => {
 
  
     //easyAI.selectSquare();
-    return {playerName, letter, winMod, isTurn, bot, turn}
+    return {playerName, letter, winMod, isTurn, bot, turn, addToNeighbor}
 
     }
 
@@ -191,7 +227,7 @@ const displayGame = (() => {
 
     const createSquare = (newSquare) => {
         
-        console.log(newSquare)
+    
         
         const square = document.createElement('div');
         const squareID = document.createElement('div');
@@ -382,6 +418,9 @@ const gameBoard = (() => {
     square.value = initialSquareValue(square);
     getSquareValue(square);
     _board.push(square);
+    if (square.row === square.col){
+        _diag.push(square);
+    }
     displayGame.createSquare(square)
 
   }
@@ -525,23 +564,36 @@ const gameBoard = (() => {
 
     const addNeighborValues = (square) => {
         let coord = square;
-        console.log(coord)
-  
-
         
-        _board.findIndex(pos => {
+  
+       if (getTurn().bot) modvalue += 5;
+
+        for (pos of _board){
+
+       // _board.findIndex(pos => {
           
         let newPos = pos;
         
   
-        if (pos.squareOwner === null) 
+        if (pos.squareOwner != null) continue;
 
         // Add value to squares along shared row/column
         if ( pos.boardPosition.row === coord.row || pos.boardPosition.col === coord.col){
             
+ 
+            
+            
             if (getRow(pos.boardPosition.row) == 2 || getCol(pos.boardPosition.col) == 2){
-                modvalue = 30;
+              addValue(pos, 1000);
             }
+
+            
+
+
+          /*  if (gameBoard.getRow(selection.row) === 2 || gameBoard.getCol(selection.col) === 2){
+                console.log("..");
+                val= 1000;
+            } */
 
             addValue(pos, modvalue);
         
@@ -572,7 +624,7 @@ const gameBoard = (() => {
 
 
        
-    })    
+    }  
 }
 
     return {addValue, setValue, addNeighborValues}
@@ -581,14 +633,19 @@ const gameBoard = (() => {
 
     const refreshValues = () => {
 
+        const values = []
         const valueTexts = document.querySelectorAll('.square-value');
+        
         valueTexts.forEach(value => {
 
             const index = value.parentNode.getAttribute('data-pos');
             value.textContent = _board[index].value;
+            values.push(_board[index].value);
 
         })
 
+        highestValue = (Math.max(...values));
+        
     }
 
 
@@ -633,13 +690,15 @@ const gameBoard = (() => {
     const clickSquare = (dom) => {
 
         if (!gameActive) return;
-        console.log(dom);
+        
         
         if (dom.classList.contains("selected-square")) return false;
       
         square = _board[dom.getAttribute("data-pos")];
-        console.log(square);
+        playerObj.addToNeighbor(square, 30);
+       
         pickSquare(square);
+        console.log(getRow(square.row));
 
       // gameBoard.setOwner(square.id, gameBoard.getTurn())
 
@@ -657,6 +716,10 @@ const gameBoard = (() => {
         square.squareOwner = getTurn();
         setSquareValue.addNeighborValues(square);
         setSquareValue.setValue(square, 0)
+
+
+
+        console.log(highestValue);
         checkWinner();
         switchPlayersTurn();
         if (getTurn().isTurn) getTurn().turn();
@@ -727,8 +790,7 @@ const gameBoard = (() => {
 
     // returns DOM object at specified coordinates
     const getSquare = (row, col) => {
-        console.log(row + "-" + col)
-        
+              
         const square = _board.find( element => element.boardPosition.col == col && element.boardPosition.row == row);
         return square;
     }
@@ -755,7 +817,7 @@ const gameBoard = (() => {
     }
     
     
-    return {_selected, _row, _col, _board, generateBoard, getArrayHighestValues ,getHighestValue, setSquareValue, generateSquare, getSquareValue, getCoords, setRowCol, getSquare, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, pickSquare, clickSquare}
+    return {_winningValues, _selected, _row, _col, _board, generateBoard, getArrayHighestValues ,getHighestValue, setSquareValue, generateSquare, getSquareValue, getCoords, setRowCol, getSquare, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, pickSquare, clickSquare, highestValue}
 })();
 
 
