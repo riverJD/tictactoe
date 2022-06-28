@@ -111,7 +111,7 @@ const Player = (player, letter, difficulty) => {
         const highestValue = () => {
 
             const temp = Math.max(gameBoard._board.map(e => e.value))
-            console.log(temp);
+            //console.log(temp);
        
         }
 
@@ -393,19 +393,15 @@ const gameBoard = (() => {
             col = CurCol;
 
             row =  (CurRow + i)
-            
-            console.log(square.boardPosition)
-             console.log('vvvvvvvvvvv')
+
 
             const neighbor = {row, col}
 
 
-            
-            console.log(neighbor)
 
             
             const neighborP = _board.find( element => (element.boardPosition.col == col && element.boardPosition.row == row))
-            console.log(neighborP)
+
 
             array.push(neighbor)
            }
@@ -417,14 +413,13 @@ const gameBoard = (() => {
             //console.log(row);
             col =  (CurCol + i)
           //  console.log("finding col")
-           console.log(square.boardPosition)
-           console.log('vvvvvvvvvvv')
+
 
             const neighbor = {row, col}
-            console.log(neighbor)
+     
             
             const neighborP = _board.find( element => element.boardPosition.col == col && element.boardPosition.row == row)
-            console.log(neighborP)
+ 
             array.push(neighbor)
            }
 
@@ -444,8 +439,7 @@ const gameBoard = (() => {
 
     }
     findNeighbor();
-    console.log("send it")
-    console.log(array)
+
     return array;
 }
 
@@ -471,17 +465,18 @@ const gameBoard = (() => {
     
   
     if (coords.row == (_winCount - 1)){
-        value += baseValue + bonusValue;
+        value += baseValue
         
 
     }
 
     if (coords.col == (_winCount - 1)){
-        value += baseValue + bonusValue;
+        value += baseValue
     }
 
+    // Center square
     if (coords.row == 1 && coords.col == 1){
-        value += baseValue;
+        value += baseValue + bonusValue;
     
     }
 
@@ -495,7 +490,7 @@ const gameBoard = (() => {
 
   const setSquareValue = ((square) => {
 
-    let modvalue = 15;
+    let modvalue = 20;
    
     
     // Add specified value, or default mod value
@@ -507,7 +502,7 @@ const gameBoard = (() => {
 
     const setValue = (square, newValue) => {
  
-        console.log(getCoords.square)
+        
         square.value = newValue;
 
     }
@@ -544,9 +539,6 @@ const gameBoard = (() => {
 
 
         if ((pos.boardPosition.row === coord.row) && (pos.boardPosition.col === coord.col)){
-            console.log("MATCH")
-            console.log(pos.boardPosition.row)
-            console.log(pos.boardPosition.col)
 
             setValue(pos, 0);
         }
@@ -609,7 +601,7 @@ const gameBoard = (() => {
     const clickSquare = (square) => {
 
         if (!gameActive) return;
-        console.log(highestValue)
+
         const row = parseInt(square.getAttribute("data-row"));
         const col = parseInt(square.getAttribute("data-col"));
 
