@@ -51,6 +51,10 @@ body{
     grid-area: 2 / 2 / 3 / 3;
 }in
 
+.square-value{
+    font-size: .8rem;
+    grid-area: 3 / 3 / 4 / 4;
+}
 
 #scoreboard{
     width: 100%;
