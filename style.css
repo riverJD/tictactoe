@@ -1,7 +1,20 @@
+:root{
 
+                    /* Save this color */
+    --square-bg-color: rgb(238, 237, 234);
+    --square-selected-color: rgb(238, 237, 234);
+    --body-bg-color: var(--square-bg-color, white);
+    --scoreboard-bg-color: rgb(53, 50, 50);
+    --modal-font-color: white;
+    --modal-bg-color:#e7d5d5;
+    --input-bg-color: black;
+
+}
 body{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    background-color: var(--body-bg-color, white);
 }
 
 /* #a83232
@@ -10,18 +23,20 @@ body{
 .game{
     display: flex;
     flex-direction: column;
-    background-color: azure;
     align-items: center;
+
+    gap: 20px;
     
 
 }
 
 .game-board{
-
-    background-color: blanchedalmond;
+    
+    background-color: rgb(36, 36, 35);
     display: grid;
     height: min(500px, 80vw);
     width: min(500px, 80vw);
+    gap: 5px;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
 
@@ -33,9 +48,9 @@ body{
     display: grid;
     grid-template-columns: 1fr 4fr 1fr;
     grid-template-rows: 1fr 4fr 1fr;
-    background-color: lightblue;
+    background-color: var(--square-bg-color);
     justify-items: center;
-    border: 1px solid black;
+    
  
 }
 
@@ -61,16 +76,19 @@ body{
     height: 200px;
     display: grid;
 
+    border-radius: 10px;
+    
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
 
-    outline: 1px blue dotted;
+    background-color: var(--scoreboard-bg-color, black);
+    color: white;
 }
 
 #turn-indicator{
-    grid-area: 1 / 2 / 3 / 3;
+    grid-area: 1 / 2 / 2 / 3;
     display: flex;
-
+    justify-content: center;
     align-items: center;
     gap: 10px;
     outline: 1px red dotted;
@@ -79,46 +97,117 @@ body{
 }
 
 #turn-header{
+    grid-area: 1 / 2 / 2 / 3;
+    text-align: center;
 
 }
 #turn-text{
+    grid-area: 2 / 2 / 3 / 3;
     font-size: 24px;
+    text-align: center;
 }
 
+#name-label{
+    margin: 1rem;
+    font-size: 2rem;
+    
+
+
+}
+
+#description{
+    height: 10vh;
+    font-size: clamp(1.2rem, 20px, 2rem);
+    padding: 5px;
+}
+
+label{
+    font-weight: bold;
+}
+
+.sub-header{
+    font-style: italic;
+    margin-left: 1rem;
+}
+
+
+button, input[type="button"]{
+    background-color: var(--button-bg-color, black);
+    color: white;
+}
+
+input[type="text"]{
+    margin-left: 1rem;
+    background-color: var(--button-bg-color, black);
+    border: 1px solid var(--modal-bg-color, rgb(235, 196, 196));
+    color: white;
+    width: 80%;
+    font-size: 1.5rem;
+}
+
+#start-submit{
+    border-radius: 5px;
+    font-size: 1.5rem;
+    margin-top: 50px;
+
+}
 .selected-square{
-    background-color:darkturquoise;
+    background-color: var(--square-selected-color);
 }
 
 .modal-container{
-    display: flex;
+   
+    display: none;
+    position: fixed;
+    z-index: 1;
+    width: max(300px, 10vw);
+    
 }
 
 .create-game-modal{
-    display: flex;;
+    display: fixed;
     flex-direction: column;
-    width: max(300px, 10vw);
-    background-color: #a83232;
+    flex: 1;
+    
+    background-color: var(--modal-bg-color, darkred);
+    border: 5px solid black;
+    border-radius: 10px;
+    
+ 
 }
 
 #create-game-form{
+    flex: 1;
     display: grid;
+    padding: 5px;
+    margin: 10px;
     justify-content: center;
-    outline: 1px dotted green;
+    
 }
 
 #create-game-form fieldset{
-    outline: 1px dotted yellow;
+
     display: flex;
-    justify-content: space-around;
+    justify-content: space-around
 }
 
 .game-letter-button{
     height: auto; 
     width: 48px;
     
-    
 }
 
+
+fieldset{
+    border: 2px solid black;
+}
+
+.difficulty{
+    height: auto;
+    border-radius: 5px;
+    font-size: 18px;
+
+}
 .selected-letter, .selected-difficulty{
     outline: 5px solid white;
     background-color: white;
@@ -129,4 +218,18 @@ body{
     display: flex;
 }
 
+.hidden{
+    display: none;
+}
 
+
+@media only screen and (max-width: 400px) {
+    .modal-container{
+        width: 100vw;
+        height: 100%;
+        display: none;
+        position: fixed;
+        z-index: 1;
+    
+    }
+  }

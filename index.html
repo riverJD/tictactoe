@@ -14,11 +14,11 @@
 
     <div class="game">
         <div id="scoreboard">
-            <div id="turn-indicator">
-                <h2 id="turn-header">TURN:</h2>
-                <h3 id="turn-text"></h3>
+            
+                <h2 id="turn-header">TURN</h2>
+                <h3 id="turn-text" >Player</h3>
 
-            </div>
+        
         </div>
     <div class="game-board">
 
@@ -32,14 +32,16 @@
 
     </div>
 
+    <div class="game-text">!</div>
+
     <div class="modal-container">
     <div class="create-game-modal">
     
         <h2 class="sub-header">Game Settings</h2>
         <form action="" id="create-game-form">
-            <label for="player_name">Player Name:</label>
+            <legend><label id="name-label" for="player_name">Player Name</label>
                 <input type="text" name="player_name" id="name_input" class="modal-input">
-               
+            </legend>
             <fieldset>
                 <legend><h2>Choose your side</h2>
                 </legend>
@@ -56,26 +58,22 @@
                 <legend>
                     <h2>Difficulty</h2>
                 </legend>
-
+                <!-- Replace with cooler looking buttons                                                      -->
                 <label for="easy">
-                    <input type="button" value="Easy" name="easy" class="difficulty selected-difficulty">
+                    <input type="button" value="Easy" name="easy" class="difficulty selected-difficulty" id="easy-button">
                 </label>
-                <label for="medium">
-                    <input type="button" value="Medium" name="medium" class="difficulty">
-                </label>
-                <label for="hard">
-                    <input type="button" value="Hard" name="hard" class="difficulty">
-                </label>
+  
 
                 <label for="impossible">
-                    <input type="button" value="Impossible" name="impossible" class="difficulty">
+                    <input type="button" value="Impossible" name="impossible" class="difficulty" id="hard-button">
                 </label>
             </fieldset>
 
-            <button type="submit" id="start-submit">Start Game!</button>
-            
+            <div id="description">hmm</div>
+            <button type="submit" id="start-submit">Start Game!</button>   
 
 </form>
+
 </div>
     
 

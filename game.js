@@ -40,13 +40,6 @@ const Player = (player, letter, difficulty) => {
 
     const addToNeighbor = (selection, val) => {
 
-        
-  
-
-
-        console.log('vvv')
-        console.log(val);
-        console.log('^^^')
        
         selection.neighbors.forEach(neighbor => {
             let next = gameBoard.getSquare(neighbor.row, neighbor.col);
@@ -64,6 +57,7 @@ const Player = (player, letter, difficulty) => {
 
     const AI = (difficulty) => {
 
+        let description = "";
         const mode = difficulty;
         let movesMade = 0;
         const readBoard = () => {
@@ -96,7 +90,7 @@ const Player = (player, letter, difficulty) => {
                         console.log((squareOptions))
                         
                         square = squareOptions[Math.floor(Math.random() * squareOptions.length)];
-                      //  console.log(square)
+                  
                         const row = parseInt(square.boardPosition.row);
                         const col = parseInt(square.boardPosition.col);
                         selection = gameBoard.getSquare(row, col);
@@ -119,12 +113,12 @@ const Player = (player, letter, difficulty) => {
                         selection = select();
     
                         return selection;
-                case 'Medium':
-
-
-                    break;
-                case 'Hard':
-                    //hard AI
+               
+            // Future use? //
+             case 'Medium':
+                   break;
+             case 'Hard':
+            //hard AI
                     break;
                 case 'Impossible':
                     //impossible AI
@@ -149,8 +143,7 @@ const Player = (player, letter, difficulty) => {
         }
 
         const findNext = (coordinate) => {
-            console.log('....')
-            console.log(coordinate)
+
             let tmp = (coordinate + 1) % 3;
             console.log(tmp)
             return tmp;
@@ -223,6 +216,79 @@ const displayGame = (() => {
     const scoreBoard = document.querySelector('#scoreboard');
     const turnHeader = document.querySelector('#turn-header');
     const turnText = document.querySelector('#turn-text')
+    const description = document.querySelector("#description")
+
+              description.textContent = `EasyBot is just learning the game.
+                                        It might beat you if you don't pay attention.
+                                        Can you spot its weakness?`
+
+    // Button to start game
+    const launchGame = document.querySelector("#start-button");
+    launchGame.addEventListener('click', () => gameLauncher())
+
+    const gameLauncher = () => {
+
+
+        // Modal Popup
+        const gameSettings = document.querySelector(".modal-container");
+        gameSettings.style.display = "flex";
+        const gameForm = gameSettings.querySelector("#create-game-form");
+        let letterSelection;
+        let difficulSelection;
+        
+
+        const letterX = document.querySelector("#choose-X");
+        const letterO = gameForm.querySelector("#choose-O");
+        letterX.addEventListener('click', () => {
+            letterX.classList.add("selected-letter");
+            letterO.classList.remove("selected-letter");
+            letterSelection = "X"
+        })
+        letterO.addEventListener('click', () => {
+            letterO.classList.add("selected-letter");
+            letterX.classList.remove("selected-letter");
+            letterSelection = "O"
+        })
+
+        const diffButton = gameForm.querySelectorAll(".difficulty");
+        diffButton.forEach(button => button.addEventListener('click', () => {
+           
+
+            // remove selection from other buttons
+            diffButton.forEach(otherbutton => {
+                otherbutton.classList.remove('selected-difficulty')
+            });
+            diffSelection = button.getAttribute("name");
+
+            button.classList.add('selected-difficulty');
+
+            if (button.id === "easy-button"){
+                description.textContent = `EasyBot is just learning the game.
+                                        It might beat you if you don't pay attention.
+                                        Can you spot its weakness?`
+            }
+            else{
+                description.textContent = `HardBot only sees the grid. Make the wrong move, and you'll lose.
+                                        The only winning move is not to play.`
+            }
+
+
+
+
+        }))
+
+
+
+        
+                                      
+
+        gameForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const gameData = new FormData(gameForm);
+            console.log(gameData)
+        
+        });
+    }
 
 
     const createSquare = (newSquare) => {
@@ -286,59 +352,10 @@ const displayGame = (() => {
         squareID.textContent = (`${squareID.textContent} (${gameBoard.getTurn().pName})`);
     }
 
-    const launchGame = document.querySelector("#start-button");
-    launchGame.addEventListener('click', () => gameLauncher())
 
 
-    const gameLauncher = () => {
 
-        const gameSettings = document.querySelector(".modal-container");
-        gameSettings.style.display = "flex"
-        const gameForm = gameSettings.querySelector("#create-game-form");
-        let letterSelection;
-        let diffSelection;
-        
 
-        const letterX = document.querySelector("#choose-X");
-        const letterO = gameForm.querySelector("#choose-O");
-        letterX.addEventListener('click', () => {
-            letterX.classList.add("selected-letter");
-            letterO.classList.remove("selected-letter");
-            letterSelection = "X"
-        })
-        letterO.addEventListener('click', () => {
-            letterO.classList.add("selected-letter");
-            letterX.classList.remove("selected-letter");
-            letterSelection = "O"
-        })
-
-        const diffButton = gameForm.querySelectorAll(".difficulty");
-        diffButton.forEach(button => button.addEventListener('click', () => {
-           
-            console.log("click")
-            // remove selection from other buttons
-            diffButton.forEach(otherbutton => {
-                otherbutton.classList.remove('selected-difficulty')
-            });
-            diffSelection = button.getAttribute("name");
-            console.log(diffSelection)
-            button.classList.add('selected-difficulty');
-
-        }))
-
-                                      
-
-        gameForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const gameData = new FormData(gameForm);
-
-            console.log(gameData.get('player_name'));
-            
-
-           
-
-        });
-    }
 
     const startGame = (e) => {
         
@@ -465,9 +482,9 @@ const gameBoard = (() => {
            if (CurCol + i >= min && CurCol + i <= max){
             row = CurRow;
             col = CurCol;
-            //console.log(row);
+
             col =  (CurCol + i)
-          //  console.log("finding col")
+
 
 
             const neighbor = {row, col}
@@ -477,9 +494,6 @@ const gameBoard = (() => {
  
             array.push(neighbor)
            }
-
-           //Edge case to add middle square
-
 
         }
 
@@ -529,7 +543,7 @@ const gameBoard = (() => {
     
     }
 
-    //console.log(value);
+
 
     return value; 
 
@@ -545,6 +559,7 @@ const gameBoard = (() => {
     // Add specified value, or default mod value
     const addValue = (square, value) => {
        
+        if (square.squareOwner != null) return;
         square.value += value;
     
         refreshValues();
@@ -575,7 +590,7 @@ const gameBoard = (() => {
         let newPos = pos;
         
   
-        if (pos.squareOwner != null) continue;
+      
 
         // Add value to squares along shared row/column
         if ( pos.boardPosition.row === coord.row || pos.boardPosition.col === coord.col){
@@ -583,17 +598,11 @@ const gameBoard = (() => {
  
             
             
-            if (getRow(pos.boardPosition.row) == 2 || getCol(pos.boardPosition.col) == 2){
+            if (getRow(pos.boardPosition.row) == 2 || getCol(pos.boardPosition.col) == 2 || getRow(pos.boardPosition.row) == -2 || getCol(pos.boardPosition.col) == -2){
               addValue(pos, 1000);
             }
 
             
-
-
-          /*  if (gameBoard.getRow(selection.row) === 2 || gameBoard.getCol(selection.col) === 2){
-                console.log("..");
-                val= 1000;
-            } */
 
             addValue(pos, modvalue);
         
@@ -606,7 +615,6 @@ const gameBoard = (() => {
         }
 
         // Points for opposite corner
-        //if (pos.boardPosition.row){}
 
 
         if ((pos.boardPosition.row === coord.row) && (pos.boardPosition.col === coord.col)){
@@ -624,7 +632,8 @@ const gameBoard = (() => {
 
 
        
-    }  
+     
+}
 }
 
     return {addValue, setValue, addNeighborValues}
@@ -670,23 +679,6 @@ const gameBoard = (() => {
         _winningValues.push(array)
       }  
 
-    // When win condition array contents add up to 3 (or -3)
-    // A line must be filled, so game ends in a win for that player
-    const checkWinner = (row, col) => {
-
-       for (arr of _winningValues){
-            
-            if (arr.includes(_winCount) || arr.includes(-_winCount)){
-
-                console.log(`${_playerTurn.playerName} wins!`)
-                endGame();
-            }
-       }
-            
-
-      
-    };
-
     const clickSquare = (dom) => {
 
         if (!gameActive) return;
@@ -698,9 +690,7 @@ const gameBoard = (() => {
         playerObj.addToNeighbor(square, 30);
        
         pickSquare(square);
-        console.log(getRow(square.row));
 
-      // gameBoard.setOwner(square.id, gameBoard.getTurn())
 
     }
 
@@ -719,7 +709,7 @@ const gameBoard = (() => {
 
 
 
-        console.log(highestValue);
+
         checkWinner();
         switchPlayersTurn();
         if (getTurn().isTurn) getTurn().turn();
@@ -804,9 +794,49 @@ const gameBoard = (() => {
     createWinArray(_diagRev);
 
 
-    function endGame(){
+    // When win condition array contents add up to 3 (or -3)
+    // A line must be filled, so game ends in a win for that player
+    const checkWinner = (row, col) => {
+
+        // Check if winner found
+       for (arr of _winningValues){
+            
+            if (arr.includes(_winCount) || arr.includes(-_winCount)){
+
+                endGame(getTurn());
+            }
+       }
+       // Check if board full
+      
+       if (_selected.length === boardSize){
+        endGame(false);
+       }
+
+            
+
+      
+    }
+
+    function endGame(winner){
+       
+        const endHeader = document.querySelector("#turn-header")
+        const endText = document.querySelector("#turn-text")
+  
+        console.log(winner)
+        if (!winner){
+            endHeader.textContent = "DRAW!"
+            endText.textContent = "Would you like to play again?"
+           
+        } 
         
-        // Kill listeners
+        else{
+        
+            endHeader.textContent = `${winner.playerName} wins!`
+            endText.textContent = "Play another game?"
+
+        }
+        // mute listeners
+
         gameActive = false;
         // Style board
 
