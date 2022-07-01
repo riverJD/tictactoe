@@ -43,7 +43,7 @@ const Player = (player, letter, difficulty) => {
        
         selection.neighbors.forEach(neighbor => {
             let next = gameBoard.getSquare(neighbor.row, neighbor.col);
-            console.log(next)
+           
             gameBoard.setSquareValue.addValue(next, val);
 
             const nextN = gameBoard.getSquare(next.row, next.col);
@@ -67,10 +67,16 @@ const Player = (player, letter, difficulty) => {
 
         // Select a square, unselected square
         const selectSquare = () => {
-            //console.log(mode)
+            const lowValue = 30;
+            const highValue = 100;
+
+
+            
             let selection = ""
             switch(mode){
 
+               
+               
                 case 'Easy':
                        // Pick a square based on row/col with lowest count.
                     //selection = readBoard()[Math.floor(Math.random() * readBoard().length)];
@@ -83,7 +89,7 @@ const Player = (player, letter, difficulty) => {
 
                         // Modify some values
                         
-                        let value = 30;
+                        let value = lowValue;
 
 
                         const squareOptions = gameBoard.getArrayHighestValues();
@@ -95,16 +101,11 @@ const Player = (player, letter, difficulty) => {
                         const col = parseInt(square.boardPosition.col);
                         selection = gameBoard.getSquare(row, col);
                         
-                        console.log(`Found highest value: ${square.value}`)
                         console.log(`Choosing square... ${selection.row}, ${selection.col}`)
     
                         addToNeighbor(selection, value);
 
-                       
-                        if (gameBoard.getRow(row) === 2 || gameBoard.getCol(col) === 2){
-                            value = 100;
-                        }
-                        
+                      
                         addToNeighbor(selection, value);
                         
                         return selection;
@@ -121,7 +122,8 @@ const Player = (player, letter, difficulty) => {
             //hard AI
                     break;
                 case 'Impossible':
-                    //impossible AI
+                    
+                bbbbbbb
                     break;
             }
   
@@ -589,25 +591,41 @@ const gameBoard = (() => {
           
         let newPos = pos;
         
-  
-      
+            
+
+
 
         // Add value to squares along shared row/column
-        if ( pos.boardPosition.row === coord.row || pos.boardPosition.col === coord.col){
-            
+        if ( pos.boardPosition.row === coord.row || pos.boardPosition.col === coord.col){    
  
-            
-            
-            if (getRow(pos.boardPosition.row) == 2 || getCol(pos.boardPosition.col) == 2 || getRow(pos.boardPosition.row) == -2 || getCol(pos.boardPosition.col) == -2){
+            // High value for blocking a win on row or column
+            if (getRow(pos.boardPosition.row) === 2 || getCol(pos.boardPosition.col) == 2 || getRow(pos.boardPosition.row) === -2 || getCol(pos.boardPosition.col) === -2){
               addValue(pos, 1000);
             }
 
-            
-
             addValue(pos, modvalue);
-        
-
+    
         }
+
+        // High value for blocking a win on diagnal
+        if (_diag[0] == 2){
+               
+            // The coordinates of squares in diagnal will equal eachother. 
+            if (pos.boardPosition.row == pos.boardPosition.col){
+                
+                addValue(pos, 1000);
+            }
+        }
+
+        // High value for blocking a win on reverse diagnal
+        if (_diagRev[0] == 2){
+            console.log('.')
+            // The coordinates of squares in reverse diagnal will add up to two (wincount or size of grid - 1)
+            if (pos.boardPosition.row + pos.boardPosition.col === (_winCount - 1)){
+                addValue(pos, 1000);
+            }
+        }
+    
 
         // More points for center square
         if (pos.boardPosition.row == 1 && pos.boardPosition.col == 1){
@@ -769,6 +787,7 @@ const gameBoard = (() => {
         if (row === col) {
             
             _diag[0] += _playerTurn.winMod;
+            
         }
 
         // The bottom left, atop right and center coordinates of the grid
