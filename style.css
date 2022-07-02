@@ -129,7 +129,7 @@ label{
 
 .sub-header{
     font-style: italic;
-    margin-left: 1rem;
+    margin: 0 0 1rem 1rem;
 }
 
 #start-button{
@@ -149,6 +149,11 @@ input[type="text"]{
     color: white;
     width: 80%;
     font-size: 1.5rem;
+}
+
+.modal-exit{
+    text-align: right;
+    position: relative;
 }
 
 #start-submit{

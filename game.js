@@ -231,21 +231,26 @@ const displayGame = (() => {
     const gameLauncher = () => {
 
 
-        // Modal Popup
+    
+        // Popup Settings Form
         const gameSettings = document.querySelector(".modal-container");
-        gameSettings.style.display = "flex";
         const gameForm = gameSettings.querySelector("#create-game-form");
+        
+        
         let letterSelection;
         let difficulSelection;
         
+        gameSettings.style.display = "flex";
 
+ 
+        
         const letterX = document.querySelector("#choose-X");
-        const letterO = gameForm.querySelector("#choose-O");
         letterX.addEventListener('click', () => {
             letterX.classList.add("selected-letter");
             letterO.classList.remove("selected-letter");
             letterSelection = "X"
         })
+        const letterO = gameForm.querySelector("#choose-O");
         letterO.addEventListener('click', () => {
             letterO.classList.add("selected-letter");
             letterX.classList.remove("selected-letter");
@@ -255,8 +260,7 @@ const displayGame = (() => {
         const diffButton = gameForm.querySelectorAll(".difficulty");
         diffButton.forEach(button => button.addEventListener('click', () => {
            
-
-            // remove selection from other buttons
+            // Swaps highlighted button
             diffButton.forEach(otherbutton => {
                 otherbutton.classList.remove('selected-difficulty')
             });
@@ -273,24 +277,23 @@ const displayGame = (() => {
                 description.textContent = `HardBot only sees the grid. Make the wrong move, and you'll lose.
                                         The only winning move is not to play.`
             }
-
-
-
-
         }))
 
-
-
-        
-                                      
+        const closeForm = document.querySelector("#close-form");
+        closeForm.addEventListener("click", () => gameSettings.style.display = "none");
 
         gameForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const gameData = new FormData(gameForm);
             console.log(gameData)
+            gameSettings.style.display = "none";
         
         });
     }
+
+
+
+                ///////////////
 
 
     const createSquare = (newSquare) => {
@@ -367,6 +370,9 @@ const displayGame = (() => {
 }
 
 )();
+
+
+// REPLACE WITH FORM
 const playerObj = Player("Player A", "X")
 const player2Obj = Player("Player B", "O", "Easy")
 
