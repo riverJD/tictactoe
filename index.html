@@ -40,18 +40,21 @@
         <h2 class="sub-header">Game Settings</h2>
         <form action="" id="create-game-form">
             <legend><label id="name-label" for="player_name">Player Name</label>
-                <input type="text" name="player_name" id="name_input" class="modal-input" required>
+                <input type="text" name="player_name" id="name-input" class="modal-input" required>
             </legend>
             <fieldset>
                 <legend><h2>Choose your side</h2>
                 </legend>
 
+
+
                 <label for="player_sideX">
-                    <input type="image" src="./img/x-box.svg" alt="Choose X" id="choose-X" class="game-letter-button selected-letter" name="player_sideX">
+
+                    <button type="button" id="choose-X" class="game-letter-button selected-letter" name="player_sideX"><img class="letter-button" src="./img/x-box.svg" alt="Pick X"></button>
                 </label>
 
                 <label for="player_sideO">
-                    <input type="image" src="./img/o-box.svg" alt="Choose O" id="choose-O" class="game-letter-button" name="player_sideY" onclick="autofill();return false;">
+                    <button type="button" id="choose-O" class="game-letter-button" name="player_sideO"><img class="letter-button" src="./img/o-box.svg" alt="Pick O"></button>
                 </label>
             </fieldset>
             <fieldset id="difficulty-fieldset">

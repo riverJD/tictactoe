@@ -75,8 +75,7 @@ const Player = (player, letter, difficulty) => {
             let selection = ""
             switch(mode){
 
-               
-               
+                          
                 case 'Easy':
                        // Pick a square based on row/col with lowest count.
                     //selection = readBoard()[Math.floor(Math.random() * readBoard().length)];
@@ -235,9 +234,10 @@ const displayGame = (() => {
         // Popup Settings Form
         const gameSettings = document.querySelector(".modal-container");
         const gameForm = gameSettings.querySelector("#create-game-form");
-        
+        const name = gameSettings.querySelector('#name-input')
         
         let letterSelection;
+        let botLetter;
         let difficulSelection;
         
         gameSettings.style.display = "flex";
@@ -249,12 +249,14 @@ const displayGame = (() => {
             letterX.classList.add("selected-letter");
             letterO.classList.remove("selected-letter");
             letterSelection = "X"
+            botLetter = "O"
         })
         const letterO = gameForm.querySelector("#choose-O");
         letterO.addEventListener('click', () => {
             letterO.classList.add("selected-letter");
             letterX.classList.remove("selected-letter");
             letterSelection = "O"
+            botLetter = "X"
         })
 
         const diffButton = gameForm.querySelectorAll(".difficulty");
@@ -264,11 +266,12 @@ const displayGame = (() => {
             diffButton.forEach(otherbutton => {
                 otherbutton.classList.remove('selected-difficulty')
             });
-            diffSelection = button.getAttribute("name");
+            diffSelection = button.value;
 
             button.classList.add('selected-difficulty');
 
             if (button.id === "easy-button"){
+                
                 description.textContent = `EasyBot is just learning the game.
                                         It might beat you if you don't pay attention.
                                         Can you spot its weakness?`
@@ -286,8 +289,15 @@ const displayGame = (() => {
             e.preventDefault();
             const gameData = new FormData(gameForm);
             console.log(gameData)
+            console.log(name.value)
+            console.log(letterSelection)
+            console.log(diffSelection)
             gameSettings.style.display = "none";
-        
+            gameBoard.gameActive = true;
+            gameBoard.generateBoard(gameBoard.getGridSize());
+            window.const = playerObj = Player(name.value, letterSelection);
+            window.const = player2Obj = Player(`${diffSelection}Bot`, botLetter, diffSelection);
+            
         });
     }
 
@@ -373,8 +383,8 @@ const displayGame = (() => {
 
 
 // REPLACE WITH FORM
-const playerObj = Player("Player A", "X")
-const player2Obj = Player("Player B", "O", "Easy")
+
+//const player2Obj = Player("Player B", "O", "Easy")
 
 const gameBoard = (() => {
 
@@ -383,7 +393,9 @@ const gameBoard = (() => {
     const boardSize = 9;
     const _winCount = 3;
     let highestValue = 0;
-    let gameActive = true;
+    let gameActive;
+
+    if (!gameActive) return;
 
     let _playerTurn = playerObj;
 
@@ -872,11 +884,11 @@ const gameBoard = (() => {
     }
     
     
-    return {_winningValues, _selected, _row, _col, _board, generateBoard, getArrayHighestValues ,getHighestValue, setSquareValue, generateSquare, getSquareValue, getCoords, setRowCol, getSquare, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, pickSquare, clickSquare, highestValue}
+    return {gameActive, _winningValues, _selected, _row, _col, _board, generateBoard, getArrayHighestValues ,getHighestValue, setSquareValue, generateSquare, getSquareValue, getCoords, setRowCol, getSquare, getSelected,  getRow, getCol, setOwner, getBoard, switchPlayersTurn, getTurn, checkWinner, getGridSize, pickSquare, clickSquare, highestValue}
 })();
 
 
-gameBoard.generateBoard(gameBoard.getGridSize());
+
 // Mark spot (look at color.js)
 
 

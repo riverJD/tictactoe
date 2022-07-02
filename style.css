@@ -205,7 +205,11 @@ input[type="text"]{
 .game-letter-button{
     height: auto; 
     width: 48px;
-    
+    padding: 0;
+    background-color: white;
+    display: flex;
+    border-radius: 10px;
+    border: none;
 }
 
 
@@ -233,6 +237,18 @@ fieldset{
     display: none;
 }
 
+#choose-X, #choose-Y{
+    border: none;
+  
+}
+
+.letter-button{
+    height: auto;
+    width: 100%;
+    
+    
+    
+}
 
 @media only screen and (max-width: 400px) {
     .modal-container{
